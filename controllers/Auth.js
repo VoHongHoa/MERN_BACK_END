@@ -3,6 +3,7 @@ const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const token = require("../token/token");
+const refreshToken = require("../models/token")
 
 register = async (req, res) => {
   //console.log("check req", req.body);
@@ -89,12 +90,43 @@ login = async (req, res) => {
     //     { userId: user._id },
     //     process.env.ACCESS_TOKEN_SECRET
     // )
-
+    await refreshToken.insertMany(token);
     const tokens = token.generateTokens(user);
+
     res.json({ success: true, message: "User logged in successfully", tokens });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+loout = (req,res,next)=>{
+  const authHeader = req.header("Authorization");
+  //console.log("check authHeader:", req);
+  const token = authHeader && authHeader.split(" ")[1];
+  // const token = req.body.token || req.query.token || req.headers["x-access-token"];
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Access Token not found",
+      errorCode: 0,
+    });
+  }
+  try {
+    refreshToken.find({token:token}).exec().then(result=>{
+      refreshToken.remove({token:result})
+      return res.json({
+        success: true,
+        message:"dang xuat thanh cong"
+      })
+    }).catch(result=>{
+      return res.json({
+        success: false,
+        message:result
+      })
+    })
+  }catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
 module.exports = { register, login };
