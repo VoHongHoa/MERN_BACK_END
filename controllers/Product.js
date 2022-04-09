@@ -1,6 +1,7 @@
-const express = require("express");
-const router = express.Router();
 const Product = require("../models/Product");
+const mongodb = require("mongoose")
+const ObjectId = mongodb.ObjectId;
+const Order = require("../controllers/Order")
 
 createProduct = async (req, res) => {
   // console.log(req.body);
@@ -129,7 +130,7 @@ getTopProduct = async (req, res) => {
         return item;
       });
     }
-    res.status(200).json({ errCode: 1, products: products });
+    res.status(200).json({errCode: 1, products: products});
   } catch (e) {
     console.log(e);
     res.status(200).json({
@@ -139,4 +140,38 @@ getTopProduct = async (req, res) => {
   }
 };
 
-module.exports = { createProduct, updatedProduct, deleteProduct, findProduct, getAllProduct, getTopProduct };
+getProductRecom = async (req, res, next) => {
+
+  let listProduct = await Product.aggregate([
+    {
+      $lookup: {
+        from: "Order",
+        localField: "_id",
+        foreignField: "productId",
+        as: "Order"
+      }
+    }, {
+      $group: "_id",
+    }, {
+      total: {$sum: "quantity"}
+    }, {
+      $sort: {quantity: 1}
+    }, {
+      $limit: 8
+    }
+  ])
+  if (listProduct == null) {
+    return res.json({
+      success: false,
+      message: "loi"
+    })
+  } else {
+    return res.json({
+      success: true,
+      message: "thanh cong",
+      listProduct: listProduct
+    })
+  }
+}
+
+module.exports = {createProduct, updatedProduct, deleteProduct, findProduct, getAllProduct, getTopProduct,getProductRecom};
