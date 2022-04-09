@@ -104,7 +104,6 @@ getAllProduct = async (req, res) => {
     } else {
       products = await Product.find().lean();
     }
-    products;
     if (products && products.length > 0) {
       products.map((item, index) => {
         let base64Img = item.img.toString("binary");
