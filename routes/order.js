@@ -2,7 +2,6 @@ const orderController = require('../controllers/Order');
 const express = require("express");
 const router = express.Router();
 const { verifyToken, verifyAdmin } = require("../middleware/auth");
-<<<<<<< HEAD
 const Order = require("../models/Order");
 const mongoose = require("mongoose");
 //CREATE
@@ -94,7 +93,6 @@ router.get("/income", verifyToken, verifyAdmin, async (req, res) => {
   }
 });
 
-=======
 
 router.post("/", verifyToken, orderController.createOrder);
 router.put("/:id", verifyToken, verifyAdmin, orderController.updatedOrder);
@@ -103,5 +101,4 @@ router.get("/find/:userId", verifyToken, verifyAdmin, orderController.getUserOrd
 router.get("/", verifyToken, verifyAdmin, orderController.getAllOrders);
 router.get("/income", verifyToken, verifyAdmin, orderController.getMonthlyIncome);
 
->>>>>>> 3388b6e14473378a00d4b1f74e8321a2d0be3279
 module.exports = router;
