@@ -1,11 +1,11 @@
 const userController = require('.../controllers/User')
 const express = require("express");
 const router = express.Router();
-const { verifyToken, verifyAdmin } = require("/middleware/auth");
+const { verifyToken, verifyLibrarian } = require("/middleware/auth");
 
-router.get("/all", verifyToken, verifyAdmin, userController.getAllUsers);
-router.get("/find-user", verifyToken, verifyAdmin, userController.findUser);
-router.get("/status", verifyToken, verifyAdmin, userController.statusAccounts);
+router.get("/all", verifyToken, verifyLibrarian, userController.getAllUsers);
+router.get("/find-user", verifyToken, verifyLibrarian, userController.findUser);
+router.get("/status", verifyToken, verifyLibrarian, userController.statusAccounts);
 
 
 module.exports = router;

@@ -1,13 +1,13 @@
 const orderController = require('../../controllers/Order');
 const express = require("express");
 const router = express.Router();
-const { verifyToken, verifyAdmin } = require("../../middleware/auth");
+const { verifyToken, verifyLibrarian } = require("/middleware/auth");
 
 router.post("/", verifyToken, orderController.createOrder);
-router.put("/:id", verifyToken, verifyAdmin, orderController.updatedOrder);
-router.delete("/:id", verifyToken, verifyAdmin, orderController.deleteOrder);
-router.get("/find/:userId", verifyToken, verifyAdmin, orderController.getUserOrders);
-router.get("/", verifyToken, verifyAdmin, orderController.getAllOrders);
-router.get("/income", verifyToken, verifyAdmin, orderController.getMonthlyIncome);
+router.put("/:id", verifyToken, verifyLibrarian, orderController.updatedOrder);
+router.delete("/:id", verifyToken, verifyLibrarian, orderController.deleteOrder);
+router.get("/find/:userId", verifyToken, verifyLibrarian, orderController.getUserOrders);
+router.get("/", verifyToken, verifyLibrarian, orderController.getAllOrders);
+router.get("/income", verifyToken, verifyLibrarian, orderController.getMonthlyIncome);
 
 module.exports = router;

@@ -41,6 +41,14 @@ deleteProduct = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
+
 findProduct = async (req, res) => {
   let keyword = "";
   if (req && req.query && req.query.keyword) {
@@ -131,4 +139,5 @@ getTopProduct = async (req, res) => {
     });
   }
 };
+
 module.exports = { createProduct, updatedProduct, deleteProduct, findProduct, getAllProduct, getTopProduct };

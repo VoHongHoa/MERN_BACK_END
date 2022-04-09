@@ -10,7 +10,7 @@ const authRouter = require("./routes/auth");
 const productRouter = require("./routes/product");
 const cartRouter = require("./routes/cart");
 const orderRouter = require("./routes/admin/order");
-const userRouter = require("./routes/user");
+const userRouter = require("./routes/user/user");
 const connectDB = async () => {
   try {
     await mongoose.connect(
