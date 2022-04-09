@@ -9,7 +9,7 @@ const authRouter = require("./routes/auth");
 
 const productRouter = require("./routes/product");
 const cartRouter = require("./routes/cart");
-const orderRouter = require("./routes/order");
+const orderRouter = require("./routes/admin/order");
 const userRouter = require("./routes/user");
 const connectDB = async () => {
   try {
