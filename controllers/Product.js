@@ -155,7 +155,7 @@ getProductRecom = async (req, res, next) => {
     }, {
       total: {$sum: "quantity"}
     }, {
-      $sort: {quantity: 1}
+      $sort: {total: 1}
     }, {
       $limit: 8
     }
