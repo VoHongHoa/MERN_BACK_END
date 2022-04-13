@@ -7,11 +7,8 @@ const refreshToken = require("../models/token")
 
 register = async (req, res) => {
   //console.log("check req", req.body);
-  const { username, email, password, fullname, address, phonenumber } =
+  const { username, email, password, fullname, address, phonenumber, img } =
     req.body;
-  // const username = req.body.username
-  // const password = req.body.password
-  // const email =req.body.email
 
   // validation
   if (!username || !password || !email)
@@ -35,6 +32,7 @@ register = async (req, res) => {
       fullname,
       address,
       phonenumber,
+      img,
     });
     await newUser.save();
     //retun token

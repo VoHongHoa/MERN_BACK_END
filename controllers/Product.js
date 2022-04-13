@@ -174,4 +174,37 @@ getProductRecom = async (req, res, next) => {
   }
 }
 
-module.exports = {createProduct, updatedProduct, deleteProduct, findProduct, getAllProduct, getTopProduct,getProductRecom};
+getProductByFilter = async (req, res) => {
+  try {
+    let { category, filterCondition } = req.query;
+    //console.log(category, filterCondition);
+    let products = await Product.find({
+      $and: [{ categories: category }, { price: { $gte: filterCondition } }],
+    }).lean();
+    if (products && products.length > 0) {
+      products.map((item, index) => {
+        let base64Img = item.img.toString("binary");
+        item.base64Img = base64Img;
+        delete item.img;
+        return item;
+      });
+    }
+    res.status(200).json({ errCode: 1, products: products });
+  } catch (e) {
+    console.log(e);
+    res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+module.exports = {
+  createProduct,
+  updatedProduct,
+  deleteProduct,
+  findProduct,
+  getAllProduct,
+  getTopProduct,
+  getProductRecom,
+  getProductByFilter,
+};

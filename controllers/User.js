@@ -63,11 +63,11 @@ findUser = (req, res) => {
   let { keyword } = req.query;
   User.find({
     $or: [
-      { fullname: keyword },
-      { username: keyword },
-      { role: keyword },
-      { address: keyword },
-      { email: keyword },
+      { fullname: { $regex: keyword, $options: "i" } },
+      { username: { $regex: keyword, $options: "i" } },
+      { role: { $regex: keyword, $options: "i" } },
+      { address: { $regex: keyword, $options: "i" } },
+      { email: { $regex: keyword, $options: "i" } },
     ],
   })
     .exec()
@@ -114,7 +114,12 @@ updateUser = async (req, res) => {
         },
       },
       { new: true }
-    );
+    ).lean();
+    // if (user && user.img) {
+    //   let base64Img = user.img.toString("binary");
+    //   user.base64Img = base64Img;
+    //   delete user.img;
+    // }
     return res.status(200).json({
       success: true,
       user,
@@ -203,7 +208,12 @@ updateInfoUser = async (req, res) => {
         },
       },
       { new: true }
-    );
+    ).lean();
+    if (user && user.img) {
+      let base64Img = user.img.toString("binary");
+      user.base64Img = base64Img;
+      delete user.img;
+    }
     return res.status(200).json({
       success: true,
       user,
@@ -253,10 +263,10 @@ getInfoUser = async (req, res) => {
         .status(200)
         .json({ success: false, message: "User not found" });
     }
-    if (user) {
+    if (user && user.img) {
       let base64Img = user.img.toString("binary");
       user.base64Img = base64Img;
-      delete item.img;
+      delete user.img;
     }
     return res.json({ success: true, user });
   } catch (error) {
