@@ -63,11 +63,11 @@ findUser = (req, res) => {
   let { keyword } = req.query;
   User.find({
     $or: [
-      { fullname: keyword },
-      { username: keyword },
-      { role: keyword },
-      { address: keyword },
-      { email: keyword },
+      { fullname: { $regex: keyword, $options: "i" } },
+      { username: { $regex: keyword, $options: "i" } },
+      { role: { $regex: keyword, $options: "i" } },
+      { address: { $regex: keyword, $options: "i" } },
+      { email: { $regex: keyword, $options: "i" } },
     ],
   })
     .exec()
