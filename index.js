@@ -8,9 +8,9 @@ const cors = require("cors");
 const authRouter = require("./routes/auth");
 
 const productRouter = require("./routes/product");
-const cartRouter = require("./routes/cart");
-const orderRouter = require("./routes/admin/order");
-const userRouter = require("./routes/user/user");
+// const cartRouter = require("./routes/cart");
+const orderRouter = require("./routes/order");
+const userRouter = require("./routes/user");
 const connectDB = async () => {
   try {
     await mongoose.connect(
@@ -56,11 +56,9 @@ app.use(function (req, res, next) {
 });
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
-
 app.use("/api/product", productRouter);
-app.use("/api/cart", cartRouter);
+// app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
-// app.use("/api/order", orderRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

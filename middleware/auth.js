@@ -42,18 +42,6 @@ const verifyAdmin = async (req, res, next) => {
 
   next();
 };
-const verifyLibrarian = async (req, res, next) => {
-  const role = req.role;
-  if (role !== "librarian") {
-    return res.json({
-      success: false,
-      message: "Không có quyền để vào trang này",
-      errorCode: 0,
-    });
-  }
-
-  next();
-};
 
 // const verifyAuthorization = (req, res, next) => {
 
@@ -65,4 +53,4 @@ const verifyLibrarian = async (req, res, next) => {
 
 // };
 
-module.exports = { verifyToken, verifyAdmin,verifyLibrarian };
+module.exports = { verifyToken, verifyAdmin };

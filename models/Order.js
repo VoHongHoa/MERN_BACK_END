@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 const OrderSchema = new Schema(
   {
     userId: { type: String, required: true },
@@ -16,7 +16,7 @@ const OrderSchema = new Schema(
     ],
     amount: { type: Number, required: true },
     address: { type: String, required: true },
-    status: { type: String, default: "pending" },
+    status: { type: String, default: "Đang giao hàng" },
   },
   { timestamps: true }
 );
