@@ -54,7 +54,24 @@ class OrderController {
 
   getAllOrders = async (req, res) => {
     try {
-      const orders = await Order.find();
+      const orders = await Order.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "products._id",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+      ]);
       res.status(200).json(orders);
     } catch (err) {
       res.status(500).json(err);
