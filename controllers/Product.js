@@ -2,7 +2,6 @@ const Product = require("../models/Product");
 
 class ProductController {
   createProduct = async (req, res) => {
-    // console.log(req.body);
     const newProduct = new Product(req.body);
     try {
       const savedProduct = await newProduct.save();
@@ -169,11 +168,74 @@ class ProductController {
 
   getProductByFilter = async (req, res) => {
     try {
-      let { category, filterCondition } = req.query;
-      //console.log(category, filterCondition);
-      let products = await Product.find({
-        $and: [{ categories: category }, { price: { $gte: filterCondition } }],
-      }).lean();
+      let { category, filterPrice, filterRam, filterRom } = req.query;
+      //console.log(category, filterPrice, filterRam, filterRom);
+      let products = [];
+      if (!filterPrice && !filterRam && !filterRom) {
+        products = await Product.find({
+          categories: category,
+        }).lean();
+      }
+
+      if (filterPrice && !filterRam && !filterRom) {
+        products = await Product.find({
+          $and: [{ categories: category }, { price: { $gte: filterPrice } }],
+        }).lean();
+      }
+
+      if (!filterPrice && filterRam && !filterRom) {
+        products = await Product.find({
+          $and: [{ categories: category }, { ram: filterRam }],
+        }).lean();
+      }
+
+      if (!filterPrice && !filterRam && filterRom) {
+        products = await Product.find({
+          $and: [{ categories: category }, { rom: filterRom }],
+        }).lean();
+      }
+
+      if (filterPrice && filterRam && !filterRom) {
+        products = await Product.find({
+          $and: [
+            { categories: category },
+            { price: { $gte: filterPrice } },
+            { ram: filterRam },
+          ],
+        }).lean();
+      }
+
+      if (filterPrice && !filterRam && filterRom) {
+        products = await Product.find({
+          $and: [
+            { categories: category },
+            { price: { $gte: filterPrice } },
+            { rom: filterRom },
+          ],
+        }).lean();
+      }
+
+      if (!filterPrice && filterRam && filterRom) {
+        products = await Product.find({
+          $and: [
+            { categories: category },
+            { ram: filterRam },
+            { rom: filterRom },
+          ],
+        }).lean();
+      }
+
+      if (filterPrice && filterRam && filterRom) {
+        products = await Product.find({
+          $and: [
+            { categories: category },
+            { price: { $gte: filterPrice } },
+            { ram: filterRam },
+            { rom: filterRom },
+          ],
+        }).lean();
+      }
+
       if (products && products.length > 0) {
         products.map((item, index) => {
           let base64Img = item.img.toString("binary");
