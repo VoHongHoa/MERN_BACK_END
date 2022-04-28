@@ -10,13 +10,6 @@ const productRouter = require("./routes/product");
 // const cartRouter = require("./routes/cart");
 const orderRouter = require("./routes/order");
 const userRouter = require("./routes/user");
-const passport = require("passport");
-
-const passportSetup = require("./passport");
-
-const userSession = require("./middleware/UserSession");
-
-const cookieSession = require("cookie-session");
 const connectDB = async () => {
   try {
     await mongoose.connect(
@@ -31,16 +24,7 @@ const connectDB = async () => {
 };
 
 connectDB();
-app.use(
-  cookieSession({
-    name: "session",
-    keys: ["uitphone"],
-    maxAge: 24 * 60 * 60 * 1000,
-  })
-);
 
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(bodyParser.urlencoded({ limit: "50mb" }, { extended: true }));
 
 app.use(express.json({ limit: "50mb" }));

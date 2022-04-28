@@ -357,6 +357,30 @@ class UserController {
       });
     }
   };
+  findUserByEmail = async (req, res) => {
+    let email = req.query.email;
+    try {
+      let user = await User.findOne({
+        email: email,
+      });
+      if (user) {
+        return res.status(200).json({
+          user,
+        });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          message: "Không có user",
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      return res.status(200).json({
+        errCode: -1,
+        errMessage: "Error from server",
+      });
+    }
+  };
 }
 
 module.exports = new UserController();
