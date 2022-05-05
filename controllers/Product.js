@@ -135,21 +135,8 @@ class ProductController {
         $lookup: {
           from: "Order",
           localField: "_id",
-          foreignField: "productId",
-          as: "Order",
+          foreignField: "products.productId",
         },
-      },
-      {
-        $group: "_id",
-      },
-      {
-        total: { $sum: "quantity" },
-      },
-      {
-        $sort: { total: 1 },
-      },
-      {
-        $limit: 8,
       },
     ]);
     if (listProduct == null) {
@@ -162,6 +149,30 @@ class ProductController {
         success: true,
         message: "thanh cong",
         listProduct: listProduct,
+      });
+    }
+  };
+  getProductById = async (req, res) => {
+    try {
+      let productId = req.query.productId;
+      let product = await Product.findOne({
+        _id: productId,
+      });
+      if (product) {
+        return res.status(200).json({
+          product,
+        });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          message: "Product not found",
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      return res.status(200).json({
+        errcode: -1,
+        message: "Error from server!",
       });
     }
   };

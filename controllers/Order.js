@@ -3,7 +3,7 @@ const Order = require("../models/Order");
 class OrderController {
   //CREATE
   createOrder = async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const newOrder = new Order(req.body);
 
     try {
@@ -71,6 +71,14 @@ class OrderController {
             as: "product",
           },
         },
+        // { $unwind: "$product" },
+        // {
+        //   $project: {
+        //     _id: "$product._id",
+        //     title: "$product.title",
+        //     quantity: "$products.quantity",
+        //   },
+        // },
       ]);
       res.status(200).json(orders);
     } catch (err) {
