@@ -157,8 +157,11 @@ class ProductController {
       let productId = req.query.productId;
       let product = await Product.findOne({
         _id: productId,
-      });
+      }).lean();
       if (product) {
+        let base64Img = product.img.toString("binary");
+        product.base64Img = base64Img;
+        delete product.img;
         return res.status(200).json({
           product,
         });
