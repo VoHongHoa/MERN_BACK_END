@@ -10,6 +10,7 @@ const productRouter = require("./routes/product");
 // const cartRouter = require("./routes/cart");
 const orderRouter = require("./routes/order");
 const userRouter = require("./routes/user");
+const reviewRouter = require("./routes/review");
 const connectDB = async () => {
   try {
     await mongoose.connect(
@@ -60,6 +61,7 @@ app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 // app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
+app.use("/api/review", reviewRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
