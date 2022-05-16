@@ -3,14 +3,20 @@ const mongoose = require("mongoose");
 
 class ReviewController {
   getAllReviews = async (req, res) => {
-    const { productId } = req.params;
     try {
-      const reviews = await Review.find({
-        productId: mongoose.Types.ObjectId(productId),
-      });
-      return res.json({ success: true, reviews });
+      const reviews = await Review.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+      ]);
+      res.status(200).json(reviews);
     } catch (err) {
-      return res.status(500).json({ success: false, message: err.message });
+      res.status(500).json(err);
     }
   };
   postReview = async (req, res) => {
