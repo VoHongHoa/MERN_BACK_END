@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 class ReviewController {
   getAllReviews = async (req, res) => {
+    const { productId } = req.params;
     try {
       const reviews = await Review.aggregate([
         {
@@ -12,6 +13,9 @@ class ReviewController {
             foreignField: "_id",
             as: "user",
           },
+        },
+        {
+          $match: { productId: mongoose.Types.ObjectId(productId) },
         },
       ]);
       res.status(200).json(reviews);
