@@ -257,16 +257,11 @@ class UserController {
   //Lấy thông tin cá nhân
   getInfoUser = async (req, res) => {
     try {
-      const user = await User.findById(req.userId).lean();
+      const user = await User.findById(req.userId);
       if (!user) {
         return res
           .status(200)
           .json({ success: false, message: "User not found" });
-      }
-      if (user && user.img) {
-        let base64Img = user.img.toString("binary");
-        user.base64Img = base64Img;
-        delete user.img;
       }
       return res.json({ success: true, user });
     } catch (error) {

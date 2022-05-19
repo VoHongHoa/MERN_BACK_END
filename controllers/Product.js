@@ -53,13 +53,6 @@ class ProductController {
         ],
       }).lean();
       if (product && product.length >= 1) {
-        product.map((item, index) => {
-          let base64Img = item.img.toString("binary");
-          item.base64Img = base64Img;
-          delete item.img;
-          return item;
-        });
-
         res.status(200).json({
           errCode: 1,
           product,
@@ -92,16 +85,9 @@ class ProductController {
           },
         }).lean();
       } else {
-        products = await Product.find().lean();
+        products = await Product.find();
       }
-      if (products && products.length > 0) {
-        products.map((item, index) => {
-          let base64Img = item.img.toString("binary");
-          item.base64Img = base64Img;
-          delete item.img;
-          return item;
-        });
-      }
+
       res.status(200).json({ errCode: 1, products: products });
     } catch (err) {
       res.status(500).json(err);
@@ -111,14 +97,6 @@ class ProductController {
   getTopProduct = async (req, res) => {
     try {
       let products = await Product.find().limit(20).lean();
-      if (products && products.length > 0) {
-        products.map((item, index) => {
-          let base64Img = item.img.toString("binary");
-          item.base64Img = base64Img;
-          delete item.img;
-          return item;
-        });
-      }
       res.status(200).json({ errCode: 1, products: products });
     } catch (e) {
       console.log(e);
@@ -159,9 +137,6 @@ class ProductController {
         _id: productId,
       }).lean();
       if (product) {
-        let base64Img = product.img.toString("binary");
-        product.base64Img = base64Img;
-        delete product.img;
         return res.status(200).json({
           product,
         });
@@ -248,15 +223,6 @@ class ProductController {
             { rom: filterRom },
           ],
         }).lean();
-      }
-
-      if (products && products.length > 0) {
-        products.map((item, index) => {
-          let base64Img = item.img.toString("binary");
-          item.base64Img = base64Img;
-          delete item.img;
-          return item;
-        });
       }
       res.status(200).json({ errCode: 1, products: products });
     } catch (e) {
