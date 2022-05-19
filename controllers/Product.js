@@ -163,25 +163,25 @@ class ProductController {
       if (!filterPrice && !filterRam && !filterRom) {
         products = await Product.find({
           categories: category,
-        }).lean();
+        });
       }
 
       if (filterPrice && !filterRam && !filterRom) {
         products = await Product.find({
           $and: [{ categories: category }, { price: { $gte: filterPrice } }],
-        }).lean();
+        });
       }
 
       if (!filterPrice && filterRam && !filterRom) {
         products = await Product.find({
           $and: [{ categories: category }, { ram: filterRam }],
-        }).lean();
+        });
       }
 
       if (!filterPrice && !filterRam && filterRom) {
         products = await Product.find({
           $and: [{ categories: category }, { rom: filterRom }],
-        }).lean();
+        });
       }
 
       if (filterPrice && filterRam && !filterRom) {
@@ -191,7 +191,7 @@ class ProductController {
             { price: { $gte: filterPrice } },
             { ram: filterRam },
           ],
-        }).lean();
+        });
       }
 
       if (filterPrice && !filterRam && filterRom) {
@@ -201,7 +201,7 @@ class ProductController {
             { price: { $gte: filterPrice } },
             { rom: filterRom },
           ],
-        }).lean();
+        });
       }
 
       if (!filterPrice && filterRam && filterRom) {
@@ -211,7 +211,7 @@ class ProductController {
             { ram: filterRam },
             { rom: filterRom },
           ],
-        }).lean();
+        });
       }
 
       if (filterPrice && filterRam && filterRom) {
@@ -222,7 +222,7 @@ class ProductController {
             { ram: filterRam },
             { rom: filterRom },
           ],
-        }).lean();
+        });
       }
       res.status(200).json({ errCode: 1, products: products });
     } catch (e) {
