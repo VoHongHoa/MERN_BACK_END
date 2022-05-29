@@ -17,6 +17,7 @@ const OrderSchema = new Schema(
     amount: { type: Number, required: true },
     address: { type: String, required: true },
     status: { type: String, default: "Đang giao hàng" },
+    payStatus: { type: String, default: "Chưa thanh toán" },
   },
   { timestamps: true }
 );

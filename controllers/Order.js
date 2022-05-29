@@ -1,5 +1,5 @@
 const Order = require("../models/Order");
-
+const mongoose = require("mongoose");
 class OrderController {
   //CREATE
   createOrder = async (req, res) => {
@@ -83,6 +83,45 @@ class OrderController {
       res.status(200).json(orders);
     } catch (err) {
       res.status(500).json(err);
+    }
+  };
+  getOrderByUserId = async (req, res) => {
+    let { userId } = req;
+    try {
+      let ordersByUserId = await Order.aggregate([
+        {
+          $match: { userId: mongoose.Types.ObjectId(userId) },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "products._id",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+      ]);
+      if (ordersByUserId) {
+        res.status(200).json(ordersByUserId);
+      } else {
+        res.status(200).json({
+          message: "Không có hóa đơn nào",
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(200).json({
+        errCode: -1,
+        message: "Lỗi server",
+      });
     }
   };
 

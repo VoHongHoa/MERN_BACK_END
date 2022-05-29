@@ -7,6 +7,7 @@ router.put("/:id", verifyToken, userController.updateInfoUser);
 router.get("/", verifyToken, userController.getInfoUser);
 router.post("/reset-password", userController.resetPassword);
 router.post("/changepassword", verifyToken, userController.changePassword);
+router.post("/do-reset-password", userController.doChangePassword);
 router.get("/find-user-by-email", userController.findUserByEmail);
 
 //Admin

@@ -19,5 +19,5 @@ router.get(
   verifyAdmin,
   orderController.getMonthlyIncome
 );
-
+router.get("/user-order", verifyToken, orderController.getOrderByUserId);
 module.exports = router;

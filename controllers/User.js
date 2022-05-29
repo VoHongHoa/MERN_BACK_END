@@ -208,16 +208,11 @@ class UserController {
           },
         },
         { new: true }
-      ).lean();
-      if (user && user.img) {
-        let base64Img = user.img.toString("binary");
-        user.base64Img = base64Img;
-        delete user.img;
-      }
+      );
       return res.status(200).json({
         success: true,
         user,
-        message: "Successfully",
+        message: "Thay đổi thông tin thành công",
         errorCode: 1,
       });
     } catch (error) {
@@ -281,24 +276,24 @@ class UserController {
     return result;
   };
   resetPassword = async (req, res) => {
-    let newPassword = makeid(6);
-    let hashedPassword = await argon2.hash(newPassword);
+    let newPassword = this.makeid(6);
+    //let hashedPassword = await argon2.hash(newPassword);
     let { email } = req.body;
     try {
-      let user = await User.findOneAndUpdate(
-        { email: email },
-        {
-          $set: {
-            password: hashedPassword,
-          },
-        },
-        { new: true }
+      let user = await User.findOne(
+        { email: email }
+        // {
+        //   $set: {
+        //     password: hashedPassword,
+        //   },
+        // },
+        // { new: true }
       );
       // console.log(user);
       if (user) {
         EmailService.sentSimpleEmail({
           email: email,
-          redirectLink: process.env.REDIRECT_LINK,
+          redirectLink: `http://localhost:3000/do-reset-password/${email}/${newPassword}`,
           newPassword: newPassword,
         });
 
@@ -310,6 +305,32 @@ class UserController {
         return res.status(200).json({
           errCode: 2,
           message: "Email không chính xác",
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      return res.status(200).json({
+        errCode: -1,
+        message: "Lỗi hệ thống",
+      });
+    }
+  };
+  doChangePassword = async (req, res) => {
+    let { email, newPassword } = req.body;
+    let hashedPassword = await argon2.hash(newPassword);
+    try {
+      let user = await User.findOneAndUpdate(
+        { email: email },
+        {
+          $set: {
+            password: hashedPassword,
+          },
+        },
+        { new: true }
+      );
+      if (user) {
+        res.status(200).json({
+          message: "OK",
         });
       }
     } catch (e) {
