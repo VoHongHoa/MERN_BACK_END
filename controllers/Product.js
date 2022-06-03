@@ -73,11 +73,27 @@ class ProductController {
   getAllProduct = async (req, res) => {
     const qNew = req.query.new;
     const qCategory = req.query.category;
+    let currentPage = 0;
+    if (req.query.page) {
+      currentPage = req.query.page;
+    }
+    let sumOfPage = 0;
     try {
+      let sumOfUser = await Product.countDocuments();
       let products;
-
+      if (sumOfUser % process.env.LIMIT_PAGING === 0) {
+        sumOfPage = sumOfUser / process.env.LIMIT_PAGING;
+      } else {
+        sumOfPage =
+          (sumOfUser - (sumOfUser % process.env.LIMIT_PAGING)) /
+            process.env.LIMIT_PAGING +
+          1;
+      }
       if (qNew) {
-        products = await Product.find().sort({ createdAt: -1 }).limit(1).lean();
+        products = await Product.find()
+          .sort({ createdAt: -1 })
+          .limit(process.env.LIMIT_PAGING)
+          .skip(currentPage * process.env.LIMIT_PAGING);
       } else if (qCategory) {
         products = await Product.find({
           categories: {
@@ -85,10 +101,14 @@ class ProductController {
           },
         }).lean();
       } else {
-        products = await Product.find();
+        products = await Product.find()
+          .limit(process.env.LIMIT_PAGING)
+          .skip(currentPage * process.env.LIMIT_PAGING);
       }
 
-      res.status(200).json({ errCode: 1, products: products });
+      res
+        .status(200)
+        .json({ errCode: 1, products: products, sumOfPage: sumOfPage });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -158,6 +178,7 @@ class ProductController {
   getProductByFilter = async (req, res) => {
     try {
       let { category, filterPrice, filterRam, filterRom } = req.query;
+      console.log(category);
       //console.log(category, filterPrice, filterRam, filterRom);
       let products = [];
       if (!filterPrice && !filterRam && !filterRom) {
